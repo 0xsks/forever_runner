@@ -1,24 +1,25 @@
+// Retrieve the canvas element from the HTML document and get its 2D drawing context.
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 
-// Game variables
-let playerX = 50;
-let playerY = canvas.height - 50;
-let playerWidth = 20;
-let playerHeight = 20;
+// Initialize game variables
+let playerX = 50; // Initial x position of the player
+let playerY = canvas.height - 50; // Initial y position of the player
+let playerWidth = 20; // Width of the player
+let playerHeight = 20; // Height of the player
 let playerSpeed = 2; // Speed at which the player moves
 let jumpStrength = 10; // Initial jump velocity
 let gravity = 0.33; // Gravity affecting the player
 let velocityY = 0; // Vertical velocity of the player
-let isJumping = false;
+let isJumping = false; // Flag to check if the player is jumping
 let floorHeight = 20; // Height of the floor
-let stars = [];
-let obstacles = [];
+let stars = []; // Array to hold star objects
+let obstacles = []; // Array to hold obstacle objects
 let mapPosition = 0; // Position of the map
-let lastTime = 0;
+let lastTime = 0; // Last time the game loop was run
 let scrollSpeed = 0.5; // Adjust this value for slower scrolling
 let points = 0; // Points counter
-let gameOver = false;
+let gameOver = false; // Flag to check if the game is over
 const minObstacleDistance = 200; // Minimum distance between obstacles
 
 // Create restart button
@@ -33,20 +34,24 @@ restartButton.style.fontSize = '20px';
 restartButton.style.display = 'none';
 document.body.appendChild(restartButton);
 
+// Add event listener to restart button to reset the game
 restartButton.addEventListener('click', function() {
     resetGame();
 });
 
+// Function to draw the player on the canvas
 function drawPlayer() {
     ctx.fillStyle = 'red';
     ctx.fillRect(50, playerY, playerWidth, playerHeight);
 }
 
+// Function to draw the floor on the canvas
 function drawFloor() {
     ctx.fillStyle = 'green';
     ctx.fillRect(0, canvas.height - floorHeight, canvas.width, floorHeight);
 }
 
+// Function to draw the background, including stars, on the canvas
 function drawBackground() {
     ctx.fillStyle = 'black';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -60,12 +65,14 @@ function drawBackground() {
     }
 }
 
+// Function to draw points on the canvas
 function drawPoints() {
     ctx.fillStyle = 'white';
     ctx.font = '20px Arial';
     ctx.fillText(`Points: ${points}`, 10, 30);
 }
 
+// Function to draw obstacles on the canvas
 function drawObstacles() {
     ctx.fillStyle = 'blue';
     for (let obstacle of obstacles) {
@@ -73,6 +80,7 @@ function drawObstacles() {
     }
 }
 
+// Function to generate stars
 function generateStars() {
     stars = [];
     for (let i = 0; i < 100; i++) {
@@ -80,6 +88,7 @@ function generateStars() {
     }
 }
 
+// Function to generate obstacles
 function generateObstacle() {
     let obstacleHeight = Math.random() < 0.5 ? 20 : 100; // Random height for obstacles
     let obstacleY = obstacleHeight === 20 ? canvas.height - floorHeight - obstacleHeight : canvas.height - floorHeight - 150; // Position above or on the floor
@@ -93,6 +102,7 @@ function generateObstacle() {
     });
 }
 
+// Function to check for collision with obstacles
 function checkCollision() {
     for (let obstacle of obstacles) {
         if (
@@ -107,6 +117,7 @@ function checkCollision() {
     return false;
 }
 
+// Main game loop function
 function update(timestamp) {
     if (gameOver) {
         ctx.fillStyle = 'white';
@@ -187,6 +198,7 @@ function update(timestamp) {
     requestAnimationFrame(update);
 }
 
+// Function to reset the game state
 function resetGame() {
     playerY = canvas.height - 50;
     velocityY = 0;
@@ -202,6 +214,7 @@ function resetGame() {
     requestAnimationFrame(update);
 }
 
+// Initialize game by generating stars and obstacles, and starting the game loop
 generateStars();
 generateObstacle();
 requestAnimationFrame(update);
